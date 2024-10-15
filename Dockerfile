@@ -14,4 +14,5 @@ WORKDIR /ansible
 COPY . .
 
 # Define o comando padrão
-CMD ["ansible-playbook", "seu_playbook.yml"]
+CMD ["bash"]
+
