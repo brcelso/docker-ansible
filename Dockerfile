@@ -1,9 +1,9 @@
 # Usa a imagem base do Ubuntu
 FROM ubuntu:20.04
 
-# Edita o arquivo /etc/apt/sources.list para garantir que o repositório principal esteja descomentado
-RUN sed -i 's/^# deb http:\/\/archive.ubuntu.com\/ubuntu focal main universe/deb http:\/\/archive.ubuntu.com\/ubuntu focal main universe/' /etc/apt/sources.list && \
-    cat /etc/apt/sources.list | grep 'focal main universe'
+# Edita o arquivo /etc/apt/sources.list para descomentar as linhas do repositório 'universe'
+RUN sed -i 's/^# deb/deb/' /etc/apt/sources.list && \
+    cat /etc/apt/sources.list | grep 'universe'
 
 # Atualiza o sistema e instala Ansible, Git, Nano e Net-Tools
 RUN apt-get update && \
