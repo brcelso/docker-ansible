@@ -2,9 +2,9 @@ name: Build and Push Docker Image with SSH
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
 
 jobs:
   build:
