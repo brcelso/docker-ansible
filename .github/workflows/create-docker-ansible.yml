@@ -1,9 +1,10 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - main  # Mude para a branch desejada
+  workflow_dispatch:
+  #push:
+    #branches:
+      #- main  # Mude para a branch desejada
   # Você também pode adicionar outros gatilhos, como pull requests
 
 jobs:
