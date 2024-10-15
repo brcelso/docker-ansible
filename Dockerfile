@@ -18,7 +18,36 @@ RUN apt-get update && \
 RUN apt-get update
 
 # Define o diretório de trabalho
-WORKDIR /ansible
+WORKDIR /name: Build and Push Docker Image
+
+on:
+  workflow_dispatch:
+  #push:
+    #branches:
+      #- main  # Mude para a branch desejada
+  # Você também pode adicionar outros gatilhos, como pull requests
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3  # Versão mais atual do checkout
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2  # Versão mais atual do docker login
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Docker image
+      run: |
+        docker build -t celsosjunior/docker-ansible:latest .
+
+    - name: Push Docker image
+      run: |
+        docker push celsosjunior/docker-ansible:latest
 
 # Copia os scripts Ansible para o contêiner
 COPY . .
