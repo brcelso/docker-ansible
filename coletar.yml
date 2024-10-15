@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  gather_facts: yes  # Coletar os fatos para o SO
+  become: true
+  tasks:
+
+    - name: Obter hostname sem usar ansible_hostname
+      ansible.builtin.command: hostname
+      register: hostname_output
+
+    - name: Imprimir hostname e sistema operacional
+      ansible.builtin.debug:
+        msg:
+          - "Hostname: {{ hostname_output.stdout }}"
+          - "Sistema Operacional: {{ ansible_os_family }} {{ ansible_distribution }} {{ ansible_distribution_version }}"
