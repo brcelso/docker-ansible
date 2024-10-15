@@ -5,6 +5,8 @@ FROM ubuntu:20.04
 RUN apt-get update && apt-get install -y \
     software-properties-common \
     ansible \
+    git \
+    nano \
     && apt-get clean
 
 # Define o diretório de trabalho
