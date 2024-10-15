@@ -1,18 +1,17 @@
 # Usa a imagem base do Ubuntu
 FROM ubuntu:20.04
 
-# Define o frontend do debconf como não interativo
-ENV DEBIAN_FRONTEND=noninteractive
+# Edita o arquivo /etc/apt/sources.list para garantir que o repositório principal esteja descomentado
+RUN sed -i 's/^# deb http:\/\/archive.ubuntu.com\/ubuntu focal main universe/deb http:\/\/archive.ubuntu.com\/ubuntu focal main universe/' /etc/apt/sources.list && \
+    cat /etc/apt/sources.list | grep 'focal main universe'
 
-# Atualiza o sistema e instala Ansible, Git e Nano
-RUN apt-get update && apt-get install -y \
-    software-properties-common \
-    ansible \
-    git \
-    nano \
-    tzdata \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*  # Limpa arquivos temporários para reduzir o tamanho da imagem
+# Atualiza o sistema e instala Ansible, Git, Nano e Net-Tools
+RUN apt-get update && \
+    apt-get install -y software-properties-common ansible git nano net-tools && \
+    apt-get clean
+
+# Atualiza os pacotes novamente após editar o sources.list
+RUN apt-get update
 
 # Define o diretório de trabalho
 WORKDIR /ansible
@@ -20,7 +19,5 @@ WORKDIR /ansible
 # Copia os scripts Ansible para o contêiner
 COPY . .
 
-# Define o comando padrão (pode ser bash ou rodar o playbook)
+# Define o comando padrão
 CMD ["bash"]
-# ou para rodar automaticamente o playbook
-# CMD ["ansible-playbook", "seu_playbook.yml"]
