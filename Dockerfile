@@ -9,9 +9,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN sed -i 's/^# deb/deb/' /etc/apt/sources.list && \
     cat /etc/apt/sources.list | grep 'universe'
 
-# Atualiza o sistema e instala Ansible, Git, Nano e Net-Tools
+# Atualiza o sistema e instala Ansible, Git, Nano, Net-Tools e iproute2
 RUN apt-get update && \
-    apt-get install -y software-properties-common ansible git nano net-tools tzdata && \
+    apt-get install -y software-properties-common ansible git nano net-tools iproute2 tzdata && \
     apt-get clean
 
 # Atualiza os pacotes novamente após editar o sources.list
