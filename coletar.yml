@@ -5,7 +5,7 @@
   tasks:
 
     - name: Obter hostname sem usar ansible_hostname
-      ansible.builtin.command: hostname
+      command: hostname
       register: hostname_output
 
     - name: Imprimir hostname e sistema operacional
