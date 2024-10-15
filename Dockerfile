@@ -5,31 +5,26 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=America/Sao_Paulo
 
-# Edita o arquivo /etc/apt/sources.list para descomentar as linhas do repositório 'universe'
-RUN sed -i 's/^# deb/deb/' /etc/apt/sources.list && \
-    cat /etc/apt/sources.list | grep 'universe'
-
-# Atualiza o sistema e instala Ansible, Git, Nano, Net-Tools e iproute2
+# Atualiza o sistema e instala Ansible, Git, Nano, Net-Tools, SSH e iproute2
 RUN apt-get update && \
-    apt-get install -y software-properties-common ansible git nano net-tools iproute2 tzdata && \
+    apt-get install -y software-properties-common ansible git nano net-tools iproute2 tzdata openssh-client && \
     apt-get clean
 
-# Atualiza os pacotes novamente após editar o sources.list
-RUN apt-get update
+# Adicionar suporte ao SSH
+# Cria a pasta .ssh e define as permissões corretas
+RUN mkdir -p /root/.ssh && chmod 700 /root/.ssh
 
-# Definir o diretório de trabalho
-WORKDIR /app
+# Adicionar a chave privada SSH durante o build
+# Aqui, o SSH_PRIVATE_KEY será passado como argumento no momento do build
+ARG SSH_PRIVATE_KEY
+RUN echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_ed25519 && \
+    chmod 600 /root/.ssh/id_ed25519
 
-# Definir variáveis de ambiente que serão passadas no build
-ARG GIT_TOKEN
-ARG GIT_USERNAME
-ARG GIT_EMAIL
+# Adicionar o GitHub ao arquivo known_hosts para evitar prompts de verificação
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
-# Configurar Git com as credenciais fornecidas
-RUN git config --global user.name "$GIT_USERNAME" && \
-    git config --global user.email "$GIT_EMAIL" && \
-    git config --global credential.helper store && \
-    echo "https://${GIT_USERNAME}:${GIT_TOKEN}@github.com" > /root/.git-credentials
+# Define o diretório de trabalho
+WORKDIR /docker-ansible
 
 # Copia os scripts Ansible para o contêiner
 COPY . .
