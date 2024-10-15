@@ -22,8 +22,8 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t seu_usuario/seu_repositorio:latest .
+        docker build -t celsosjunior/docker-ansible:latest .
 
     - name: Push Docker image
       run: |
-        docker push seu_usuario/seu_repositorio:latest
+        docker push celsosjunior/docker-ansible:latest
